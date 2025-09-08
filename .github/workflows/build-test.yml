@@ -21,5 +21,8 @@ jobs:
             - name: Display Go version
               run: go version
 
+            - name: Get dependencies
+              run: go mod tidy
+
             - name: Build Tests
               run: go test ./internal/...
