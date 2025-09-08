@@ -1,0 +1,5 @@
+.env
+go.sum
+
+dist/
+.vscode/
