@@ -3,9 +3,11 @@ package main
 import (
 	"example.com/go-auth-globo/internal/config"
 	"example.com/go-auth-globo/internal/server"
+	"example.com/go-auth-globo/internal/service"
 )
 
 func main() {
+	service.InitLoggerService()
 	config.InitAppInfo()
 	defer config.CleanAppInfo()
 

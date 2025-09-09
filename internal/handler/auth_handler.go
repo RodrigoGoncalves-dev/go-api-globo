@@ -19,14 +19,14 @@ func (h *AuthHandler) DoLogin(c *gin.Context) {
 	err := c.ShouldBindJSON(&input)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inseridos incorretamente"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Dados inseridos incorretamente"})
 		return
 	}
 
 	result, err := h.u.DoLogin(input)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Ocorreu um erro, entre em contato com o time de suporte."})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Ocorreu um erro, entre em contato com o time de suporte."})
 		return
 	}
 
@@ -37,7 +37,7 @@ func (h *AuthHandler) DoLogin(c *gin.Context) {
 	session.Options(sessions.Options{Path: "/", MaxAge: 60 * 60})
 
 	if err = session.Save(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Ocorreu um erro, entre em contato com o time de suporte."})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Ocorreu um erro, entre em contato com o time de suporte."})
 	}
 
 	c.JSON(http.StatusOK, result)

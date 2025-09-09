@@ -1,8 +1,9 @@
 package database
 
 import (
+	"log/slog"
+
 	"example.com/go-auth-globo/internal/config"
-	"example.com/go-auth-globo/internal/service"
 	redisStore "github.com/gin-contrib/sessions/redis"
 )
 
@@ -15,7 +16,7 @@ func OpenRedis() (redisStore.Store, error) {
 	store, err := redisStore.NewStore(10, "tcp", url, user, password, []byte(secret))
 
 	if err != nil {
-		service.Logger().Error("Error on parse URL")
+		slog.Error("Error on parse URL")
 		panic(err)
 	}
 

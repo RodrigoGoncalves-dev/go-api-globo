@@ -18,7 +18,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	u, err := h.uc.GetUser(email)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Ocorreu um erro, entre em contato com o time de suporte."})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Ocorreu um erro, entre em contato com o time de suporte."})
 		return
 	}
 
