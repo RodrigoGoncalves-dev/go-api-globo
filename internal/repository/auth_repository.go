@@ -2,6 +2,8 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
+	"log/slog"
 	"time"
 
 	"example.com/go-auth-globo/internal/domain"
@@ -20,25 +22,29 @@ func (r *AuthRepository) DoLogin(input domain.LoginInput) (*domain.LoginOutput, 
 	rows, err := r.db.Query("SELECT id, senha FROM users WHERE email=($1)", input.Email)
 
 	if err != nil {
-		service.Logger().Error("Failed to get user from database")
+		slog.Error("Failed to get user from database")
 		return nil, err
 	}
 	defer rows.Close()
 
-	for rows.Next() {
+	if rows.Next() {
 		err = rows.Scan(&id, &hashed)
 
 		if err != nil {
-			service.Logger().Error("Failed to scan user")
+			slog.Error("Failed to scan user")
 			return nil, err
 		}
 
 		err = service.ComparePassword([]byte(hashed), []byte(input.Password))
 
 		if err != nil {
-			service.Logger().Error("Password is not matched")
+			slog.Error("Password is not matched")
 			return nil, err
 		}
+	} else {
+		slog.Error("User not found on database")
+		err = errors.New("userNotFound")
+		return nil, err
 	}
 
 	token, err := service.NewJWTService().CreateToken(id)

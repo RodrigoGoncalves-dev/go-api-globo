@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log/slog"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -9,7 +11,7 @@ func HashPassword(p []byte) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword(p, cost)
 
 	if err != nil {
-		Logger().Error("Error on generate hash password")
+		slog.Error("Error on generate hash password")
 		return "", err
 	}
 
@@ -20,7 +22,7 @@ func ComparePassword(hashed []byte, password []byte) error {
 	err := bcrypt.CompareHashAndPassword(hashed, password)
 
 	if err != nil {
-		Logger().Error("Error on compare hash password")
+		slog.Error("Error on compare hash password")
 		return err
 	}
 

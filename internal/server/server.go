@@ -2,9 +2,9 @@ package server
 
 import (
 	"log"
+	"log/slog"
 
 	"example.com/go-auth-globo/internal/route"
-	"example.com/go-auth-globo/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -33,7 +33,7 @@ func (s *Server) Run() {
 }
 
 func startHttpServer(e *gin.Engine) {
-	service.Logger().Info("BINDING ADDRESS...")
+	slog.Info("BINDING ADDRESS...")
 
 	e.Run(":5000")
 }

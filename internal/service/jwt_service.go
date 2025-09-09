@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"log/slog"
 	"time"
 
 	"example.com/go-auth-globo/internal/config"
@@ -36,7 +37,7 @@ func (j *jwtService) CreateToken(id uint) (string, error) {
 	t, err := token.SignedString(j.secretKey)
 
 	if err != nil {
-		Logger().Error("Unsuccessfully to signed token")
+		slog.Error("Unsuccessfully to signed token")
 		return "", err
 	}
 

@@ -3,10 +3,10 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log/slog"
 	"time"
 
 	"example.com/go-auth-globo/internal/config"
-	"example.com/go-auth-globo/internal/service"
 	_ "github.com/lib/pq"
 )
 
@@ -43,12 +43,12 @@ func OpenDB() (*sql.DB, error) {
 				break
 			}
 		}
-		service.Logger().Info(fmt.Sprintf("Tentando conectar no banco... (%d/10)", i+1))
+		slog.Info(fmt.Sprintf("Tentando conectar no banco... (%d/10)", i+1))
 		time.Sleep(2 * time.Second)
 	}
 
 	if err != nil {
-		service.Logger().Error("Error on connect database")
+		slog.Error("Error on connect database")
 		panic(err)
 	}
 

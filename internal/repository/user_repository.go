@@ -2,9 +2,10 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
+	"log/slog"
 
 	"example.com/go-auth-globo/internal/domain"
-	"example.com/go-auth-globo/internal/service"
 )
 
 type UserRepository struct {
@@ -21,17 +22,17 @@ func (r *UserRepository) GetUser(email string) (*domain.User, error) {
 	rows, err := r.DB.Query("SELECT nome, email FROM users WHERE email=($1)", email)
 
 	if err != nil {
-		service.Logger().Error("Failed to get user from database")
+		slog.Error("Failed to get user from database")
 		return nil, err
 	}
 	defer rows.Close()
 
-	for rows.Next() {
+	if rows.Next() {
 
 		err = rows.Scan(&dto.Name, &dto.Email)
 
 		if err != nil {
-			service.Logger().Error("Failed to scan user")
+			slog.Error("Failed to scan user")
 			return nil, err
 		}
 
@@ -39,7 +40,12 @@ func (r *UserRepository) GetUser(email string) (*domain.User, error) {
 			Name:  dto.Name.String,
 			Email: dto.Email.String,
 		}
+	} else {
+		slog.Error("User not found on database")
+		err = errors.New("userNotFound")
+		return nil, err
 	}
+	slog.Info("Successfully found user on database")
 
 	return &u, nil
 }
